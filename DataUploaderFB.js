@@ -89,7 +89,7 @@ module.exports = class DataUploader {
               case "select_occupation":
                 switch (value) {
                   case "":
-                    value = 0;
+                    value = "";
                     break;
                   case "無職":
                     value = 1;
@@ -115,69 +115,140 @@ module.exports = class DataUploader {
                 }
                 break;
               case "tax_law_support_add_reason":
-                switch (value) {
-                  case "":
-                    value = 0;
-                    break;
-                  case "配偶者の就職":
-                    value = 1;
-                    break;
-                  case "婚姻":
-                    value = 2;
-                    break;
-                  case "出生":
-                    value = 31;
-                    break;
-                  case "離職":
-                    value = 32;
-                    break;
-                  case "収入減少":
-                    value = 33;
-                    break;
-                  case "収入減":
-                    value = 33;
-                    break;
-                  case "同居":
-                    value = 34;
-                    break;
-                  case "その他":
-                    value = 35;
-                    break
-                  default:
-                    returnObj["tax_law_support_add_reason_other"] = value; 
-                    value = 35;
+                if (kintoneRecord["区分"].value === "配偶者") {
+                  switch (value) {
+                    case "":
+                      value = "";
+                      break;
+                    case "配偶者の就職":
+                      value = 1;
+                      break;
+                    case "就職":
+                      value = 1;
+                      break;
+                    case "婚姻":
+                      value = 2;
+                      break;
+                    case "離職":
+                      value = 3;
+                      break;
+                    case "収入減少":
+                      value = 4;
+                      break;
+                    case "収入減":
+                      value = 4;
+                      break;
+                    case "その他":
+                      value = 5;
+                      break
+                    default:
+                      returnObj["tax_law_support_add_reason_other"] = value; 
+                      value = 5;
+                  }
+                  break;
                 }
-                break;
-
+                else if (kintoneRecord["区分"].value === "家族") {
+                  switch (value) {
+                    case "":
+                      value = "";
+                      break;
+                    case "出生":
+                      value = 31;
+                      break;
+                    case "離職":
+                      value = 32;
+                      break;
+                    case "収入減少":
+                      value = 33;
+                      break;
+                    case "収入減":
+                      value = 33;
+                      break;
+                    case "同居":
+                      value = 34;
+                      break;
+                    case "その他":
+                      value = 35;
+                      break
+                    default:
+                      returnObj["tax_law_support_add_reason_other"] = value; 
+                      value = 35;
+                  }
+                  break;
+                }
+                else {
+                  value = ""
+                }
               case "tax_law_support_del_reason":
-                switch (value) {
-                  case "":
-                    value = 0;
-                    break;
-                  case "死亡":
-                    value = 31;
-                    break;
-                  case "就職":
-                    value = 32;
-                    break;
-                  case "収入増加":
-                    value = 33;
-                    break;
-                  case "75歳到達":
-                    value = 34;
-                    break;
-                  case "障害認定":
-                    value = 35;
-                    break;
-                  case "その他":
-                    value = 36;
-                    break;
-                  default:
-                    returnObj["tax_law_support_del_reason_other"] = value; 
-                    value = 36;
+                if (kintoneRecord["区分"].value === "配偶者") {
+                  switch (value) {
+                    case "":
+                      value = "";
+                      break;
+                    case "死亡":
+                      value = 1;
+                      returnObj["support_death_date"] = kintoneRecord["扶養を外れた日税法"].value; 
+                      break; 
+                    case "離婚":
+                      value = 2;
+                      break;
+                    case "就職・収入増加":
+                      value = 3;
+                      break;
+                    case "就職":
+                      value = 3;
+                      break;
+                    case "収入増加":
+                      value = 3;
+                      break;
+                    case "75歳到達":
+                      value = 4;
+                      break;
+                    case "障害認定":
+                      value = 5;
+                      break;
+                    case "その他":
+                      value = 6;
+                      break;
+                    default:
+                      returnObj["tax_law_support_del_reason_other"] = value; 
+                      value = 6;
+                  }
+                  break;
                 }
-                break;
-                
+                else if (kintoneRecord["区分"].value === "家族") {
+                  switch (value) {
+                    case "":
+                      value = "";
+                      break;
+                    case "死亡":
+                      value = 31;
+                      returnObj["support_death_date"] = kintoneRecord["扶養を外れた日税法"].value; 
+                      break;
+                    case "就職":
+                      value = 32;
+                      break;
+                    case "収入増加":
+                      value = 33;
+                      break;
+                    case "75歳到達":
+                      value = 34;
+                      break;
+                    case "障害認定":
+                      value = 35;
+                      break;
+                    case "その他":
+                      value = 36;
+                      break;
+                    default:
+                      returnObj["tax_law_support_del_reason_other"] = value; 
+                      value = 36;
+                  }
+                  break;
+                }
+                else {
+                  value = ""
+                }
               case "si_support":
                 if (value === "該当する") value = 1;
                 else if (value === "該当しない") value = 0;
@@ -369,7 +440,8 @@ module.exports = class DataUploader {
     let family_obj = [];
     let transferFields = [];
     const spouse = TRANSFER_LIST.spouse.fields;
-    const spouse_spare = TRANSFER_LIST.spouse_spare.fields;
+    const spouse_spare1 = TRANSFER_LIST.spouse_spare1.fields;
+    const spouse_spare2 = TRANSFER_LIST.spouse_spare2.fields;
     const numbered_dependents = TRANSFER_LIST.numbered_dependents.fields;
 
     if (record["連絡種別"].value === "入社連絡") {
@@ -394,10 +466,10 @@ module.exports = class DataUploader {
       record["連絡種別"].value === "家族の扶養変更"
     ) {
       if (record["区分"].value === "家族") {
-        transferFields = spouse.concat(spouse_spare);
+        transferFields = spouse.concat(spouse_spare2);
       }
       else if (record["区分"].value === "配偶者") {
-        transferFields = spouse
+        transferFields = spouse.concat(spouse_spare1);
       }
       let spouse_data = this.convertKintoneToOffista(record, transferFields);
       family_obj.push(spouse_data);

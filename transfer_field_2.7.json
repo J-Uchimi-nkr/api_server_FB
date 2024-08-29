@@ -431,7 +431,33 @@
       }
     ]
   },
-  "spouse_spare": {
+  "spouse_spare1": {
+    "from": "kintone",
+    "dest": "offista",
+    "fields": [
+      {
+        "from": "配偶者続柄",
+        "dest": "relationship",
+        "type": "int"
+      },
+      {
+        "from": "配偶者職業",
+        "dest": "select_occupation",
+        "type": "int"
+      },
+      {
+        "from": "扶養になった理由税法",
+        "dest": "tax_law_support_add_reason",
+        "type": "int"
+      },
+      {
+        "from": "扶養を外れた理由税法",
+        "dest": "tax_law_support_del_reason",
+        "type": "int"
+      }
+    ]
+  },
+  "spouse_spare2": {
     "from": "kintone",
     "dest": "offista",
     "fields": [
@@ -443,6 +469,16 @@
       {
         "from": "家族2職業",
         "dest": "select_occupation",
+        "type": "int"
+      },
+      {
+        "from": "扶養になった理由2税法",
+        "dest": "tax_law_support_add_reason",
+        "type": "int"
+      },
+      {
+        "from": "扶養を外れた理由2税法",
+        "dest": "tax_law_support_del_reason",
         "type": "int"
       }
     ]
